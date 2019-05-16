@@ -1,68 +1,51 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# react-tdd
 
-## Available Scripts
+TDD の練習
 
-In the project directory, you can run:
+## 仕様
 
-### `npm start`
+今回のテスト対象として簡単なログイン画面を作る。  
+<img width="389" alt="view-image" src="./assets/view-image.png">
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+仕様は以下とする
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+- ログイン仕様
+  - ID 欄には email アドレスが入力されること
+  - Password は６文字以上であること
+  - 今回は ID,Password が正しく入力されている状態で LoginButton を押したら成功とする
+  - (今回は決めで ID:test@example.com, Password:password123#)
+- 画面項目
+  - ID を入力するテキストボックス
+    - 必須入力
+    - type=text
+    - email の入力を想定
+    - 入力値は email のパターンに沿っていない場合、テキストボックスのすぐ下にパターンに沿っていない旨を表示
+    - email のパターンチェックタイミングは、onchange 時
+    - email のパターンチェックが正しいときは、ターンに沿っていない旨のメッセージは表示しない
+  - Password を入力するテキストボックス
+    - 必須入力
+    - type=password
+    - 入力値が 6 文字未満の場合、テキストボックスのすぐ下に文字数不足の旨を表示
+    - Password の文字数チェックタイミングは、onchange 時
+    - Password の桁数に問題ないときは、文字数不足の旨のメッセージは表示しない
+  - Login ボタン
+    - ID とパスワードが Validation 処理を突破していない場合は、ボタンが押せないこと
+    - 問題がなければボタン下に成功の旨を表示
+    - ログインできなかった場合は、できなかった旨をボタン下にメッセージを表示する(今回は決めで ID:test@example.com, Password:password123#以外は失敗扱い)
 
-### `npm test`
+# テスト方針
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+テストとしては、トップダウンでもボトムアップでも行える（はず）。実際は、トップダウンは簡単だが、大きいプロジェクトの場合はトップダウンでのテストは難しくなるので、ボトムアップでテストしながらやっていくのが良いでしょう。
 
-### `npm run build`
+## テスト対象
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+最低限以下はチェックしていく
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- レンダリングのテスト
+  - エラーが出ていないこと
+  - 構文エラーが出ていないこと
+  - アウトプットが null でないこと
+- 状態のテスト
+  - ログイン失敗時や成功時の動作
+- イベントのテスト
+  - onclick, focusout などのイベント
